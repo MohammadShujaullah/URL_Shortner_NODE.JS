@@ -1,0 +1,11 @@
+we have to make a URL shortner, we provide any URL, and then my website providfe shrtend URL
+then, we also  a tracker which tracks, how many clicks are on that URL
+
+
+Routes--
+
+Post/URL-  generate the short URL and return the shortend URL
+
+GET/:id-  Redirect the user to original URL 
+
+GET/URL/analytics/:id-  return the number of clicks
