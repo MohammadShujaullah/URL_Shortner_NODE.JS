@@ -14,7 +14,7 @@ async function handlegenerateShortURL(req, res) {
 
     await URL.create({
       shortId,
-      redirectUrl: url, // ✅ REQUIRED FIELD
+      redirectUrl: url, //  REQUIRED FIELD
       visitHistory: [],
     });
 
