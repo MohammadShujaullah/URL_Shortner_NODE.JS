@@ -7,6 +7,9 @@ const path =require("path");
 
 const urlrouter = require("./routes/url");
 
+const staticRoute=require("./routes/staticRouter");
+
+
 const URL = require("./models/url");
 
 
@@ -26,6 +29,9 @@ connectToMongoDB("mongodb://127.0.0.1:27017/short-url")
 app.use(express.json());
 
 
+// middleware to parse the data comming from the form submit in the view file
+app.use(express.urlencoded({ extended: true }));
+
 
 
 //set view engine for ejs
@@ -35,44 +41,16 @@ app.set("views",path.resolve("./views"));
 
 
 
-// test route to check all urls in db and their visit counts at /test    
-app.get("/test", async (req, res) => {
-   const allUrls=await URL.find({});
-
-    return res.render("home",{
-        urls:allUrls
-    });
-
-
-
-    
-//instead of sending raw html we can use ejs template engine to render the data at browser
-
-//     return res.end(
-//         ` <html><head></head>
-// <body>
-//     <ol>
-//         ${allUrls.map((url) =>
-//             `<li>${url.shortId}:${url.redirectUrl}->${url.visitHistory.length}</li>`
-//         ).join("")}
-//     </ol>
-// </body>
-//         </html>
-//     `)
-
-})
-
-
-
-
 //routes
 app.use("/url", urlrouter);           //all routes related to url will be handled by urlrouter
 
 
 app.use("/", urlrouter); //route for handling short URL visits
 
-app.use("/", urlrouter); //route for handling analytics requests
+ app.use("/", urlrouter); //route for handling analytics requests
 
+
+app.use("/",staticRoute); // routes for the handling for the static pages like home page, about page etc
 
 
 app.listen(port, () => {

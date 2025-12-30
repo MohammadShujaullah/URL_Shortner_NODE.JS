@@ -5,17 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <style>
+        body{
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+        }
+    </style>
 </head>
 
 
 
 <body>
-    <h1>welcome from the server side</h1>
-    <% urls.forEach(url=>{ %>
-        <li>
-            <%= url.shortId %>
-        </li>                                         
-        <% })%>
+    <h1>welcome to URL Shortener</h1>
+
+    <form method="POST" action="/url">
+        <label for ="urls" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Enter Your Originial URL:</label>
+        <input  name="url" type="text" id="urls" placeholder="https//:example.com">
+        <button type="submit">Generate</button>
+    </form>
+   
 </body>
 
 </html>
