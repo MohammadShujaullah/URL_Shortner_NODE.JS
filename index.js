@@ -37,19 +37,29 @@ app.set("views",path.resolve("./views"));
 
 // test route to check all urls in db and their visit counts at /test    
 app.get("/test", async (req, res) => {
-    const allUrls = await URL.find({});
+   const allUrls=await URL.find({});
 
-    return res.end(
-        ` <html><head></head>
-<body>
-    <ol>
-        ${allUrls.map((url) =>
-            `<li>${url.shortId}:${url.redirectUrl}->${url.visitHistory.length}</li>`
-        ).join("")}
-    </ol>
-</body>
-        </html>
-    `)
+    return res.render("home",{
+        urls:allUrls
+    });
+
+
+
+    
+//instead of sending raw html we can use ejs template engine to render the data at browser
+
+//     return res.end(
+//         ` <html><head></head>
+// <body>
+//     <ol>
+//         ${allUrls.map((url) =>
+//             `<li>${url.shortId}:${url.redirectUrl}->${url.visitHistory.length}</li>`
+//         ).join("")}
+//     </ol>
+// </body>
+//         </html>
+//     `)
+
 })
 
 
