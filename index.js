@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const app = express();
 const port = 8001;
 
+//import path module used for ejs view engine
 const path =require("path");
 
 const urlrouter = require("./routes/url");

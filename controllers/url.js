@@ -18,7 +18,8 @@ async function handlegenerateShortURL(req, res) {
       visitHistory: [],
     });
 
-    return res.status(201).json({ id: shortId });
+    return res.render("home",{id:shortId,});
+  
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Server error" });
