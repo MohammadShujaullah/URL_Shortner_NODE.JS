@@ -3,12 +3,19 @@ const mongoose = require("mongoose");
 const app = express();
 const port = 8001;
 
+//import cookie parser middleware,used for parsing cookies
+const cookieParser = require("cookie-parser");
+
+
+
+const {restrictToLoginUserOnly}=require("./middleware/auth");
+
 //import path module used for ejs view engine
-const path =require("path");
+const path = require("path");
 
 const urlrouter = require("./routes/url");
-
-const staticRoute=require("./routes/staticRouter");
+const staticRoute = require("./routes/staticRouter");
+const userRouter = require("./routes/user");
 
 
 const URL = require("./models/url");
@@ -34,25 +41,38 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+// this middleware for cookie parser
+app.use(cookieParser());
 
 //set view engine for ejs
-app.set("view engine","ejs");
+app.set("view engine", "ejs");
 //set view directory for ejs files 
-app.set("views",path.resolve("./views"));
+app.set("views", path.resolve("./views"));
 
 
+
+app.use("/", staticRoute); // routes for the handling for the static pages like home page, about page etc
+
+
+app.use("/user", userRouter);    //it is used for handling user signup and login
 
 //routes
-app.use("/url", urlrouter);           //all routes related to url will be handled by urlrouter
+app.use("/url",restrictToLoginUserOnly, urlrouter);           //all routes related to url will be handled by urlrouter
 
 
 app.use("/", urlrouter); //route for handling short URL visits
 
- app.use("/", urlrouter); //route for handling analytics requests
+app.use("/", urlrouter); //route for handling analytics requests
 
 
-app.use("/",staticRoute); // routes for the handling for the static pages like home page, about page etc
 
+
+
+
+
+/*signup was not rendering because your URL router was mounted on / before the frontend routes.
+That router contains a dynamic route (/:shortId), so Express treated signup as a shortId and sent the request to the URL router instead of the frontend (staticRoute).
+Because of this route conflict and wrong order, the signup page was never reached. */
 
 app.listen(port, () => {
     console.log(`server is running at port:${port}`);

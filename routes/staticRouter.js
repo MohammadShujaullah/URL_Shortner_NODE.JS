@@ -1,29 +1,31 @@
- const express=require("express");
+const express = require("express");
 // jitne bhi front end pages han unhe staticRouter bolte han
 
-const URL=require("../models/url");
+const URL = require("../models/url");
 
 
-const router=express.Router();
+const router = express.Router();
 
 
-router.get("/",async(req,res)=>{
+router.get("/", async (req, res) => {
 
-    const allUrls= await URL.find({});
+  const allUrls = await URL.find({});
 
-    return res.render("home",{
-      urls:allUrls
-    });
+  return res.render("home", {
+    urls: allUrls
+  });
 });
 
 
 
+router.get("/signup", (req, res) => {
+  return res.render("signup");
+})
 
 
+router.get("/login",(req,res)=>{
 
+  return res.render("login");
+})
 
-
-
-
-
-module.exports=router;
+module.exports = router;
