@@ -1,15 +1,16 @@
-const express = require("express");
 // jitne bhi front end pages han unhe staticRouter bolte han
+const express = require("express");
 
 const URL = require("../models/url");
-
 
 const router = express.Router();
 
 
 router.get("/", async (req, res) => {
-
-  const allUrls = await URL.find({});
+   if(!req.user){
+    return res.redirect("/login");
+   }
+  const allUrls = await URL.find({ createdBy:req.user._id}); // fetch all URLs created by the logged-in user only
 
   return res.render("home", {
     urls: allUrls

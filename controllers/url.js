@@ -16,6 +16,7 @@ async function handlegenerateShortURL(req, res) {
       shortId,
       redirectUrl: url, //  REQUIRED FIELD
       visitHistory: [],
+      createdBy:req.user._id,   // req.user is set in the restrictToLoginUserOnly middleware, for associating the short URL with the user who created it
     });
 
     return res.render("home",{id:shortId,});

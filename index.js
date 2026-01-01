@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 
 
 
-const {restrictToLoginUserOnly}=require("./middleware/auth");
+const {restrictToLoginUserOnly,checkAuth}=require("./middleware/auth");
 
 //import path module used for ejs view engine
 const path = require("path");
@@ -51,7 +51,7 @@ app.set("views", path.resolve("./views"));
 
 
 
-app.use("/", staticRoute); // routes for the handling for the static pages like home page, about page etc
+app.use("/",checkAuth, staticRoute); // routes for the handling for the static pages like home page, about page etc
 
 
 app.use("/user", userRouter);    //it is used for handling user signup and login

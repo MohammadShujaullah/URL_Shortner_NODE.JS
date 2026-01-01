@@ -17,6 +17,12 @@ const urlSchema = new mongoose.Schema({
    visitHistory: [
       { timestamp: { type: Number } }
    ],
+
+    // only  the user can see their shortIds On the wesite
+   createdBy:{
+      type:mongoose.Schema.Types.ObjectId,       // ham ek id generate karenge jo user ko reference krega
+      ref:"users"                            
+   },
   
 
 
