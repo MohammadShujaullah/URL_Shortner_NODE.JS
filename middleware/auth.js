@@ -23,7 +23,7 @@ async function restrictToLoginUserOnly(req, res, next) {
 // for this we made this function
 
 async function checkAuth(req,res,next) {
-    const userUid = req.cookies?.uid;  //get the uid cookie from the request,the nae uid comes from ../controllers/user.js where we set the cookie
+    const userUid = req.cookies?.uid;  //get the uid cookie from the request,the name uid comes from ../controllers/user.js where we set the cookie
 
 
 

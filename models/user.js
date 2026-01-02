@@ -12,7 +12,7 @@ const userSchema=mongoose.Schema({
     },
     password:{
         type:String,
-        requires:true,
+        required:true,
         
     }
 },{timestamps:true});

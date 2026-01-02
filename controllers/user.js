@@ -1,5 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
-
 const { setUser } = require("../service/auth");
 const User = require("../models/user");
 
@@ -36,11 +34,14 @@ async function handleUserLogin(req, res) {
 
 
 
-    const sessionId = uuidv4();   // Generate a unique session ID,downloaded from uuid package
+ 
+    const token = setUser(user);  // Store the user against the session ID
 
-    setUser(sessionId, user);  // Store the user against the session ID
-
-    res.cookie("uid", sessionId);    // Set a cookie in the user's browser with the session ID
+    res.cookie("uid", token, {
+        httpOnly: true,  // Prevents JavaScript access to cookie (security)
+        secure: false,   // Set to true in production with HTTPS
+        maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 24 hours
+    });    // Set a cookie in the user's browser now with the token
 
 
 
