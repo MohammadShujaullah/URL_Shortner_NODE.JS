@@ -37,12 +37,16 @@ async function handleUserLogin(req, res) {
  
     const token = setUser(user);  // Store the user against the session ID
 
- 
+    res.cookie("uid", token, {
+        httpOnly: true,  // Prevents JavaScript access to cookie (security)
+        secure: false,   // Set to true in production with HTTPS
+        maxAge: 24 * 60 * 60 * 1000  // Cookie expires in 24 hours
+    });    // Set a cookie in the user's browser now with the token
 
 
 
 
-    return res.json({ token });
+    return res.redirect("/");
 
 }
 
