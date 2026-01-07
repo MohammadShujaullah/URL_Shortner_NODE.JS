@@ -1,33 +1,42 @@
 const { getUser } = require("../service/auth");
 
-async function restrictToLoginUserOnly(req, res, next) {
-    const userUid = req.cookies?.uid;  //get the uid cookie from the request, the name uid comes from ../controllers/user.js where we set the cookie
-                                       //***means client sends cookie to server and if cookie has uid which matches with the token we set during login then only user is authenticated
-    if (!userUid) {                // if user has no uid cookie, then redirect to login page
-        return res.redirect("/login");
+
+function checkForAuthentication(req, res, next) {
+    const tokenCookie = req.cookies?.uid;  //get the uid cookie from the request, the name uid comes from ../controllers/user.js where we set the cookie
+    req.user = null;
+    if (!tokenCookie) {
+        return next();
     }
 
-    const user = getUser(userUid);
-    if (!user) {                  // agr user hi nahi mila to fir se login page pr bhej do
-        return res.redirect("/login");
-    }
+    const token = tokenCookie;
+    const user = getUser(token);
+
 
     req.user = user;
-    next();
 
+    return next();
 }
+
+
 
 // only those Urls related to logged in user will be seen on the home page of the user
-// for this we made this function
+function restrictTo(roles = []) {
 
-async function checkAuth(req,res,next) {
-    const userUid = req.cookies?.uid;  //get the uid cookie from the request, the name uid comes from ../controllers/user.js where we set the cookie
+    return function (req, res, next) {
+        if (!req.user) return res.redirect("/login");    // if user is not logged in, redirect to login page
 
-    const user = getUser(userUid);
+        if (!roles.includes(req.user.role)) {
+            return res.end("Unauthorized");
 
-    req.user = user;
-    next();
+        }
+
+        return next();
+
+
+    }
 
 }
 
-module.exports = { restrictToLoginUserOnly ,checkAuth};
+  
+
+module.exports = { checkForAuthentication, restrictTo };

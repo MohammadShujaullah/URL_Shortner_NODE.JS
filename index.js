@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 
 
 
-const {restrictToLoginUserOnly,checkAuth}=require("./middleware/auth");
+const {checkForAuthentication, restrictTo}=require("./middleware/auth");
 
 //import path module used for ejs view engine
 const path = require("path");
@@ -50,14 +50,15 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
 
+app.use(checkForAuthentication); // to set req.user if user is logged in,so first this middleware will run for every request
 
-app.use("/",checkAuth, staticRoute); // routes for the handling for the static pages like home page, about page etc
+app.use("/", staticRoute); // routes for the handling for the static pages like home page, about page etc (login/signup are public, home requires auth check inside route)
 
 
 app.use("/user", userRouter);    //it is used for handling user signup and login
 
 //routes
-app.use("/url",restrictToLoginUserOnly, urlrouter);           //all routes related to url will be handled by urlrouter
+app.use("/url", restrictTo(["NORMAL","ADMIN"]), urlrouter);           //all routes related to url will be handled by urlrouter
 
 
 app.use("/", urlrouter); //route for handling short URL visits

@@ -7,6 +7,7 @@ function setUser(user) {
     return jwt.sign({
         _id: user._id.toString(),  // Convert Mongoose ObjectId to string
         email: user.email,
+        role: user.role || "NORMAL",  // Include role in JWT token
     }, secret)
 
 
